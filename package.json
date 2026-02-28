@@ -1,0 +1,16 @@
+{
+  "name": "claudian",
+  "version": "1.0.0",
+  "description": "Obsidian plugin for Claude Code CLI integration",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "esbuild": "^0.19.0",
+    "obsidian": "latest",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "claudian",
+  "name": "Claudian",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Run Claude Code CLI from within Obsidian to read and write your vault.",
+  "author": "Ziad Kadry",
+  "authorUrl": "",
+  "isDesktopOnly": true
+}
