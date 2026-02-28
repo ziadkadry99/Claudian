@@ -6,9 +6,9 @@
 <p align="center"><em>Claude Code, inside Obsidian.</em></p>
 
 <p align="center">
-  <a href="https://github.com/ziadkadry99/claudian/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/ziadkadry99/claudian?style=flat-square"></a>
+  <a href="https://github.com/ziadkadry99/Claudian/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/ziadkadry99/Claudian?style=flat-square"></a>
   <img alt="Desktop only" src="https://img.shields.io/badge/platform-desktop-blue?style=flat-square">
-  <img alt="License" src="https://img.shields.io/github/license/ziadkadry99/claudian?style=flat-square">
+  <img alt="License" src="https://img.shields.io/github/license/ziadkadry99/Claudian?style=flat-square">
 </p>
 
 ---
@@ -17,10 +17,12 @@ Claudian is an Obsidian plugin that brings the full power of the [Claude Code CL
 
 ## Features
 
-- **Natural-language editing** — describe what you want in plain English; Claude handles the rest
-- **Live streaming output** — see Claude's thinking and tool calls as they happen
-- **Collapsible tool cards** — inspect every file read/write in a clean, expandable UI
-- **Granular permissions** — independently control whether Claude can list vault structure, edit files, or create new ones
+- **Quick Action mode** — one-shot prompt with live streaming output; textarea locks when done
+- **Chat mode** — multi-turn conversation with persistent history across modal opens and Obsidian sessions; resumable via `--resume`
+- **Markdown rendering** — Claude's output renders with proper headings, lists, bold, code blocks, and more
+- **Animated loading indicator** — bouncing dots show when Claude is working
+- **Model selection** — type any Claude model ID (e.g. `claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-6`)
+- **Granular permissions** — independently control read, list, edit, and create access
 - **Wikilink-aware** — Claude understands `[[wikilinks]]`, YAML frontmatter, and Obsidian conventions
 
 ## Demo
@@ -43,9 +45,32 @@ Claudian is an Obsidian plugin that brings the full power of the [Claude Code CL
 
 ### Manual installation
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/ziadkadry99/claudian/releases/latest)
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/ziadkadry99/Claudian/releases/latest)
 2. Copy them to `<vault>/.obsidian/plugins/claudian/`
 3. In Obsidian: **Settings → Community plugins → Enable Claudian**
+
+## Usage
+
+### Quick Action
+
+1. Open any note and press `Cmd+Shift+C`
+2. Make sure the **Quick Action** tab is selected
+3. Type your instruction, e.g.:
+   - *"Summarise this note in three bullet points and add them at the top"*
+   - *"Convert all plain list items to checkboxes"*
+4. Press `Ctrl+Enter` (or `Cmd+Enter`) to run
+
+Claude streams its response live with markdown rendering. The textarea locks when done to make the output easy to read.
+
+### Chat
+
+1. Open the modal and click the **Chat** tab
+2. Type a message and press `Ctrl+Enter` to send
+3. Claude responds in a conversation thread — your messages appear as bubbles on the right, Claude's replies render below
+4. Send follow-up messages freely; Claude remembers the full context of the conversation
+5. Click **Clear** to start a fresh conversation
+
+Chat history and the session ID persist between modal opens and Obsidian restarts until you click Clear.
 
 ## Configuration
 
@@ -53,41 +78,29 @@ Go to **Settings → Claudian** to configure:
 
 | Setting | Default | Description |
 |---|---|---|
-| Claude binary path | `claude` | Full path to the `claude` binary if not on Obsidian's PATH (e.g. `/Users/you/.local/bin/claude`) |
-| List vault structure | Off | Allow Glob, Grep, and LS tools |
-| Edit current file | Off | Allow editing the currently active file |
-| Edit any file | Off | Allow editing any file in the vault |
-| Create files | Off | Allow creating new files |
-
-## Usage
-
-1. Open any note
-2. Press `Cmd+Shift+C` (or configure a custom hotkey)
-3. Type your instruction, e.g.:
-   - *"Summarise this note in three bullet points and add them at the top"*
-   - *"Find all notes tagged #todo and list them here"*
-   - *"Convert all plain list items to checkboxes"*
-4. Press `Ctrl+Enter` (or `Cmd+Enter`) to run
-
-Claude streams its output live. Each file operation appears as a collapsible tool card you can inspect.
+| Claude binary path | `claude` | Full path to the `claude` binary if not on Obsidian's PATH |
+| Model | `claude-haiku-4-5` | Any model ID supported by the CLI (e.g. `claude-sonnet-4-6`, `claude-opus-4-6`) |
+| Clear chat on start | Off | Wipe chat history and session automatically when Obsidian launches |
 
 ## Permissions
 
-Claudian uses Claude Code's `--allowedTools` flag to enforce permissions at the CLI level — Claude cannot use a tool that isn't explicitly enabled, regardless of what it's asked to do.
+Claudian uses Claude Code's `--allowedTools` flag to enforce tool-level permissions at the CLI — Claude cannot use a tool that isn't explicitly enabled regardless of what it's asked to do. Read access is further restricted via the system prompt.
 
-| Permission | Tools granted |
-|---|---|
-| (always) | `Read` |
-| List vault structure | `Glob`, `Grep`, `LS` |
-| Edit current file | `Edit` |
-| Edit any file | `Edit`, `Write` |
-| Create files | `Write` |
+By default Claude can only read the **currently active file**. Enable permissions progressively as needed:
+
+| Permission | Default | What it enables |
+|---|---|---|
+| Read entire vault | Off | Read any file in the vault |
+| List vault structure | Off | `Glob`, `Grep`, `LS` — search and list files |
+| Edit current file | Off | `Edit` — modify the currently active file only |
+| Edit any file | Off | `Edit`, `Write` — modify any file in the vault |
+| Create files | Off | `Write` — create new files |
 
 ## Building from source
 
 ```bash
-git clone https://github.com/ziadkadry99/claudian
-cd claudian
+git clone https://github.com/ziadkadry99/Claudian
+cd Claudian
 npm install
 npm run build   # produces main.js
 ```

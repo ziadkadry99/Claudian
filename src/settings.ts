@@ -2,6 +2,7 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import type ClaudianPlugin from "../main";
 
 export interface ClaudianPermissions {
+  readVault: boolean;
   listVaultStructure: boolean;
   editCurrentFile: boolean;
   editAnyFile: boolean;
@@ -20,6 +21,7 @@ export const DEFAULT_SETTINGS: ClaudianSettings = {
   model: "claude-haiku-4-5",
   clearChatOnStart: false,
   permissions: {
+    readVault: false,
     listVaultStructure: false,
     editCurrentFile: false,
     editAnyFile: false,
@@ -55,7 +57,16 @@ export function buildPermissionInstructions(
   lines.push("");
   lines.push("You have the following permissions in this vault:");
   lines.push("");
-  lines.push(`- Read files: YES (always enabled)`);
+
+  if (settings.permissions.readVault) {
+    lines.push(`- Read files: YES (any file in the vault)`);
+  } else if (currentFilePath) {
+    lines.push(
+      `- Read files: RESTRICTED — you may only read the currently active file: ${currentFilePath}`
+    );
+  } else {
+    lines.push(`- Read files: RESTRICTED — no file is currently active, you may not read any files`);
+  }
 
   if (settings.permissions.listVaultStructure) {
     lines.push(`- List vault structure (Glob, Grep, LS): YES`);
@@ -150,9 +161,21 @@ export class ClaudianSettingTab extends PluginSettingTab {
     containerEl.createEl("h3", { text: "Permissions" });
 
     containerEl.createEl("p", {
-      text: "Control what Claude Code is allowed to do inside your vault. Claude can always read files.",
+      text: "Control what Claude Code is allowed to do inside your vault. By default Claude can only read the currently active file.",
       cls: "setting-item-description",
     });
+
+    new Setting(containerEl)
+      .setName("Read entire vault")
+      .setDesc("Allow Claude to read any file in the vault. By default it can only read the currently active file.")
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.permissions.readVault)
+          .onChange(async (value) => {
+            this.plugin.settings.permissions.readVault = value;
+            await this.plugin.saveSettings();
+          })
+      );
 
     new Setting(containerEl)
       .setName("List vault structure")
