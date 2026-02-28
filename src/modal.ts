@@ -99,7 +99,7 @@ export class ClaudianModal extends Modal {
     // Mode tabs
     const tabsEl = headerEl.createDiv("claudian-mode-tabs");
     this.quickTabBtn = tabsEl.createEl("button", {
-      text: "Quick Action",
+      text: "Quick action",
       cls: "claudian-mode-tab claudian-mode-tab--active",
     });
     this.quickTabBtn.addEventListener("click", () => this.switchMode("quick"));
@@ -136,7 +136,6 @@ export class ClaudianModal extends Modal {
       text: "Clear",
       cls: "claudian-btn claudian-btn--clear",
     });
-    this.clearBtn.style.display = "none";
     this.clearBtn.addEventListener("click", () => this.handleClear());
 
     this.cancelBtn = buttonsEl.createEl("button", {
@@ -157,13 +156,11 @@ export class ClaudianModal extends Modal {
     // Output area
     this.outputEl = contentEl.createDiv("claudian-output");
 
-    // Conversation container (chat mode, hidden by default)
+    // Conversation container (chat mode, hidden by default via CSS)
     this.conversationEl = this.outputEl.createDiv("claudian-conversation");
-    this.conversationEl.style.display = "none";
 
     // Status line
     this.statusEl = contentEl.createDiv("claudian-status");
-    this.statusEl.style.display = "none";
 
     setTimeout(() => this.promptTextarea.focus(), 50);
   }
@@ -200,7 +197,6 @@ export class ClaudianModal extends Modal {
     this.hideLoadingIndicator();
     this.outputEl.empty();
     this.conversationEl = this.outputEl.createDiv("claudian-conversation");
-    this.conversationEl.style.display = "none";
 
     this.toolCards.clear();
     this.currentTextBlock = null;
@@ -329,9 +325,8 @@ export class ClaudianModal extends Modal {
 
       this.outputEl.empty();
       this.conversationEl = this.outputEl.createDiv("claudian-conversation");
-      this.conversationEl.style.display = "none";
 
-      this.clearBtn.style.display = "none";
+      this.clearBtn.removeClass("is-visible");
       this.modalEl.removeClass("claudian-modal--chat");
       this.promptTextarea.setAttribute(
         "placeholder",
@@ -343,9 +338,9 @@ export class ClaudianModal extends Modal {
 
       this.outputEl.empty();
       this.conversationEl = this.outputEl.createDiv("claudian-conversation");
-      this.conversationEl.style.display = "flex";
+      this.conversationEl.addClass("is-visible");
 
-      this.clearBtn.style.display = "";
+      this.clearBtn.addClass("is-visible");
       this.modalEl.addClass("claudian-modal--chat");
       this.promptTextarea.setAttribute(
         "placeholder",
@@ -428,7 +423,7 @@ export class ClaudianModal extends Modal {
     this.currentTurnMarkdown += text;
 
     this.currentTextBlock.empty();
-    MarkdownRenderer.render(
+    void MarkdownRenderer.render(
       this.app,
       this.currentTextContent,
       this.currentTextBlock,
@@ -466,7 +461,6 @@ export class ClaudianModal extends Modal {
     });
 
     const bodyEl = cardEl.createDiv("claudian-tool-card__body");
-    bodyEl.style.display = "none";
 
     const inputEl = bodyEl.createEl("pre", { cls: "claudian-tool-card__input" });
     inputEl.textContent = JSON.stringify(event.input, null, 2);
@@ -487,7 +481,7 @@ export class ClaudianModal extends Modal {
 
     headerEl.addEventListener("click", () => {
       card.isExpanded = !card.isExpanded;
-      bodyEl.style.display = card.isExpanded ? "block" : "none";
+      bodyEl.toggleClass("is-expanded", card.isExpanded);
       toggleEl.textContent = card.isExpanded ? "\u25BC" : "\u25B6";
     });
 
@@ -539,8 +533,8 @@ export class ClaudianModal extends Modal {
 
   private setStatus(status: ModalStatus): void {
     this.status = status;
-    this.statusEl.style.display = "block";
-    this.statusEl.className = "claudian-status";
+    this.statusEl.addClass("is-visible");
+    this.statusEl.className = "claudian-status is-visible";
 
     switch (status) {
       case "running":
@@ -572,7 +566,7 @@ export class ClaudianModal extends Modal {
         break;
 
       case "idle":
-        this.statusEl.style.display = "none";
+        this.statusEl.removeClass("is-visible");
         this.runBtn.disabled = false;
         this.cancelBtn.textContent = "Cancel";
         break;

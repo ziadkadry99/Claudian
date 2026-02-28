@@ -252,14 +252,18 @@
 }
 
 .claudian-tool-card__body {
+  display: none;
   padding: 8px 10px;
   background: var(--background-primary);
   border-top: 1px solid var(--background-modifier-border);
-  display: flex;
   flex-direction: column;
   gap: 6px;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+.claudian-tool-card__body.is-expanded {
+  display: flex;
 }
 
 .claudian-tool-card__input {
@@ -298,10 +302,15 @@
 
 /* ── Status line ─────────────────────────────────────────── */
 .claudian-status {
+  display: none;
   padding: 8px 20px 14px;
   font-size: 0.85em;
   font-weight: 500;
   flex-shrink: 0;
+}
+
+.claudian-status.is-visible {
+  display: block;
 }
 
 .claudian-status--running {
@@ -350,9 +359,14 @@
 
 /* ── Clear button ────────────────────────────────────────── */
 .claudian-btn--clear {
+  display: none;
   background: var(--background-modifier-border);
   color: var(--text-muted);
   margin-right: auto;
+}
+
+.claudian-btn--clear.is-visible {
+  display: inline-block;
 }
 
 .claudian-btn--clear:hover {
@@ -386,10 +400,14 @@
 
 /* ── Conversation + turn containers ─────────────────────── */
 .claudian-conversation {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 16px;
   width: 100%;
+}
+
+.claudian-conversation.is-visible {
+  display: flex;
 }
 
 .claudian-turn {

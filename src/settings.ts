@@ -114,8 +114,6 @@ export class ClaudianSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Claudian Settings" });
-
     new Setting(containerEl)
       .setName("Claude binary path")
       .setDesc(
@@ -158,7 +156,7 @@ export class ClaudianSettingTab extends PluginSettingTab {
           })
       );
 
-    containerEl.createEl("h3", { text: "Permissions" });
+    new Setting(containerEl).setName("Permissions").setHeading();
 
     containerEl.createEl("p", {
       text: "Control what Claude Code is allowed to do inside your vault. By default Claude can only read the currently active file.",
