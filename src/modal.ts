@@ -145,7 +145,7 @@ export class ClaudianModal extends Modal {
     this.cancelBtn.addEventListener("click", () => this.handleCancel());
 
     this.runBtn = buttonsEl.createEl("button", {
-      text: "Run (Ctrl+\u23CE)",
+      text: "Run",
       cls: "qlaude-btn qlaude-btn--run",
     });
     this.runBtn.addEventListener("click", () => this.handleRun());
@@ -577,19 +577,17 @@ export class ClaudianModal extends Modal {
     toolName: string,
     input: Record<string, unknown>
   ): string {
+    const str = (v: unknown) => (typeof v === "string" ? v : "");
     switch (toolName) {
       case "Read":
-        return String(input.file_path ?? "");
       case "Edit":
-        return String(input.file_path ?? "");
       case "Write":
-        return String(input.file_path ?? "");
+        return str(input.file_path);
       case "Glob":
-        return String(input.pattern ?? "");
       case "Grep":
-        return String(input.pattern ?? "");
+        return str(input.pattern);
       case "LS":
-        return String(input.path ?? ".");
+        return str(input.path) || ".";
       default:
         return Object.keys(input).slice(0, 2).join(", ");
     }

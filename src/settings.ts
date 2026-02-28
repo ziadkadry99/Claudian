@@ -121,7 +121,6 @@ export class ClaudianSettingTab extends PluginSettingTab {
       )
       .addText((text) =>
         text
-          .setPlaceholder("claude")
           .setValue(this.plugin.settings.claudeBinaryPath)
           .onChange(async (value) => {
             this.plugin.settings.claudeBinaryPath = value.trim() || "claude";
@@ -132,11 +131,10 @@ export class ClaudianSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Model")
       .setDesc(
-        "Claude model ID to use for all requests (e.g. claude-sonnet-4-6, claude-opus-4-6). Any model supported by the CLI can be entered here."
+        "Claude model ID to use for all requests. Any model supported by the CLI can be entered here."
       )
       .addText((text) =>
         text
-          .setPlaceholder("claude-haiku-4-5")
           .setValue(this.plugin.settings.model)
           .onChange(async (value) => {
             this.plugin.settings.model = value.trim() || "claude-haiku-4-5";
@@ -159,13 +157,13 @@ export class ClaudianSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Permissions").setHeading();
 
     containerEl.createEl("p", {
-      text: "Control what Claude Code is allowed to do inside your vault. By default Claude can only read the currently active file.",
+      text: "Control what Claude is allowed to do inside your vault. By default Claude can only read the currently active file.",
       cls: "setting-item-description",
     });
 
     new Setting(containerEl)
       .setName("Read entire vault")
-      .setDesc("Allow Claude to read any file in the vault. By default it can only read the currently active file.")
+      .setDesc("Read any file in the vault, not just the currently active file.")
       .addToggle((toggle) =>
         toggle
           .setValue(this.plugin.settings.permissions.readVault)
@@ -177,7 +175,7 @@ export class ClaudianSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("List vault structure")
-      .setDesc("Allow Claude to search and list files in your vault using Glob, Grep, and LS tools.")
+      .setDesc("Search and list files in your vault using glob, grep, and ls.")
       .addToggle((toggle) =>
         toggle
           .setValue(this.plugin.settings.permissions.listVaultStructure)
@@ -189,7 +187,7 @@ export class ClaudianSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Edit current file")
-      .setDesc("Allow Claude to edit the currently active file.")
+      .setDesc("Edit the currently active file.")
       .addToggle((toggle) =>
         toggle
           .setValue(this.plugin.settings.permissions.editCurrentFile)
@@ -208,7 +206,7 @@ export class ClaudianSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("Edit any file")
       .setDesc(
-        "Allow Claude to edit any file in the vault (implies edit current file permission)."
+        "Edit any file in the vault (also enables edit current file)."
       )
       .addToggle((toggle) =>
         toggle
@@ -225,7 +223,7 @@ export class ClaudianSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Create files")
-      .setDesc("Allow Claude to create new files in the vault.")
+      .setDesc("Create new files in the vault.")
       .addToggle((toggle) =>
         toggle
           .setValue(this.plugin.settings.permissions.createFiles)

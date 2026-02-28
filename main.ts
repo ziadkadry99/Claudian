@@ -19,11 +19,10 @@ export default class ClaudianPlugin extends Plugin {
     this.addCommand({
       id: "open-claudian-modal",
       name: "Open",
-      hotkeys: [{ modifiers: ["Mod", "Shift"], key: "c" }],
       callback: () => this.openModal(),
     });
 
-    this.addRibbonIcon("bot", "Open Qlaude", () => this.openModal());
+    this.addRibbonIcon("bot", "Open", () => this.openModal());
   }
 
   async loadSettings(): Promise<void> {
